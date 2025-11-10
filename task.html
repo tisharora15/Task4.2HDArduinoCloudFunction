@@ -20,6 +20,11 @@
       gap: 15px;
       align-items: center;
     }
+    .light-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     .light {
       width: 60px;
       height: 60px;
@@ -27,40 +32,58 @@
       background: #555;
       cursor: pointer;
     }
-    .red.on {
-         background: red;
-         }
-    .green.on { 
-        background: green;
-     }
-    .blue.on { background: blue; 
+    .label {
+      color: white;
+      font-size: 16px;
+      margin-top: 5px;
     }
+    .red.on { background: red; }
+    .green.on { background: green; }
+    .blue.on { background: blue; }
   </style>
 </head>
 <body>
   <div class="traffic-light">
-    <div id="red" class="light red" onclick="toggleLight('red')"></div>
-    <div id="green" class="light green" onclick="toggleLight('green')"></div>
-    <div id="blue" class="light blue" onclick="toggleLight('blue')"></div>
+    <div class="light-group">
+      <div id="red" class="light red" onclick="toggleLight('red')"></div>
+      <div class="label">Red Light</div>
+    </div>
+    <div class="light-group">
+      <div id="green" class="light green" onclick="toggleLight('green')"></div>
+      <div class="label">Green Light</div>
+    </div>
+    <div class="light-group">
+      <div id="blue" class="light blue" onclick="toggleLight('blue')"></div>
+      <div class="label">Blue Light</div>
+    </div>
   </div>
 
   <script>
-    const baseURL = "https://hdproject-3fe83-default-rtdb.firebaseio.com/color/";
-function toggleLight(color) {
-    let el = document.getElementById(color);
-    let state = !el.classList.contains("on");
-    if (state) {
-      el.classList.add("on");
-    } else {
-      el.classList.remove("on");
-    }
+  const baseURL = "https://hdproject-3fe83-default-rtdb.firebaseio.com/color.json";
 
-    fetch(baseURL + color + ".json", {
+  function toggleLight(color) {
+    
+    document.getElementById("red").classList.remove("on");
+    document.getElementById("green").classList.remove("on");
+    document.getElementById("blue").classList.remove("on");
+
+    
+    document.getElementById(color).classList.add("on");
+
+    
+    const newState = {
+      red: color === "red",
+      green: color === "green",
+      blue: color === "blue"
+    };
+
+    
+    fetch(baseURL, {
       method: "PUT",
-      body: JSON.stringify(state)
+      body: JSON.stringify(newState)
     });
-    }
+  }
+</script>
 
-  </script>
 </body>
 </html>
